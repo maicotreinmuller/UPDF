@@ -30,9 +30,8 @@ import {
   X,
   RotateCcw,
 } from "lucide-react"
-import dynamic from "next/dynamic"
 
-// Configurar worker do PDF.js
+// Configurar worker do PDF.js apenas no cliente
 if (typeof window !== "undefined") {
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
 }
@@ -54,6 +53,15 @@ interface LoadedPDF {
 const PageThumbnail = ({ page, pdf, scale = 0.2 }: { page: PDFPage; pdf: LoadedPDF; scale?: number }) => {
   const [isPageLoading, setIsPageLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
+
+  // Verificar se estamos no cliente antes de renderizar
+  if (typeof window === "undefined") {
+    return (
+      <div className="flex items-center justify-center bg-gray-100 rounded p-4 min-h-[100px]">
+        <Loader2 className="w-4 h-4 animate-spin" />
+      </div>
+    )
+  }
 
   return (
     <div className="relative">
@@ -98,6 +106,15 @@ const PageThumbnail = ({ page, pdf, scale = 0.2 }: { page: PDFPage; pdf: LoadedP
 }
 
 const PreviewView = ({ pages, loadedPDFs }: { pages: PDFPage[]; loadedPDFs: LoadedPDF[] }) => {
+  // Verificar se estamos no cliente antes de renderizar
+  if (typeof window === "undefined") {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <ScrollArea className="h-full">
       <div className="flex flex-col items-center gap-6 p-8">
@@ -127,20 +144,7 @@ const PreviewView = ({ pages, loadedPDFs }: { pages: PDFPage[]; loadedPDFs: Load
   )
 }
 
-// Importar o componente PDF Editor apenas no cliente para evitar erros de SSR
-const PDFEditor = dynamic(() => import("../components/pdf-editor"), {
-  ssr: false,
-  loading: () => (
-    <div className="h-screen bg-background flex items-center justify-center">
-      <div className="text-center">
-        <Loader2 className="w-8 h-8 mx-auto mb-4 animate-spin" />
-        <p className="text-sm text-gray-500">Carregando editor...</p>
-      </div>
-    </div>
-  ),
-})
-
-export default function UPDF() {
+export default function PDFEditor() {
   const [loadedPDFs, setLoadedPDFs] = useState<LoadedPDF[]>([])
   const [pages, setPages] = useState<PDFPage[]>([])
   const [selectedPages, setSelectedPages] = useState<string[]>([])
@@ -156,9 +160,15 @@ export default function UPDF() {
   const [showPreview, setShowPreview] = useState(false)
   const [generationStep, setGenerationStep] = useState<"generating" | "success" | null>(null)
   const [isDragOver, setIsDragOver] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const addPagesInputRef = useRef<HTMLInputElement>(null)
+
+  // Verificar se estamos no cliente
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   // Inicializar páginas quando documentos são carregados
   useEffect(() => {
@@ -612,6 +622,18 @@ export default function UPDF() {
       setIsLoading(false)
     }
   }, [])
+
+  // Mostrar loading enquanto não estiver no cliente
+  if (!isClient) {
+    return (
+      <div className="h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 mx-auto mb-4 animate-spin" />
+          <p className="text-sm text-gray-500">Carregando editor...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <TooltipProvider>
