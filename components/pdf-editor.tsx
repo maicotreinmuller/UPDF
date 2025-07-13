@@ -33,7 +33,7 @@ import {
 
 // Configurar worker do PDF.js apenas no cliente
 if (typeof window !== "undefined") {
-  pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@4.4.168/build/pdf.worker.min.js`
+  pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`
 }
 
 interface PDFPage {
