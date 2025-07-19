@@ -1072,9 +1072,9 @@ export default function PDFEditor() {
         {/* Modal Salvar PDF */}
         <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
           <DialogContent>
-            <DialogTitle className="flex flex-col space-y-1.5 text-center sm:text-left text-lg font-semibold leading-none tracking-tight">
-              Salvar PDF Organizado
-            </DialogTitle>
+            <DialogHeader>
+              <DialogTitle>Salvar PDF Organizado</DialogTitle>
+            </DialogHeader>
             <div className="space-y-4">
               {generationStep === "generating" ? (
                 <div className="flex items-center justify-center py-8">
@@ -1115,9 +1115,9 @@ export default function PDFEditor() {
         {/* Modal Salvar ZIP */}
         <Dialog open={showZipDialog} onOpenChange={setShowZipDialog}>
           <DialogContent>
-            <DialogTitle className="flex flex-col space-y-1.5 text-center sm:text-left text-lg font-semibold leading-none tracking-tight">
-              Salvar Páginas Separadamente
-            </DialogTitle>
+            <DialogHeader>
+              <DialogTitle>Salvar Páginas Separadamente</DialogTitle>
+            </DialogHeader>
             <div className="space-y-4">
               {generationStep === "generating" ? (
                 <div className="flex items-center justify-center py-8">
