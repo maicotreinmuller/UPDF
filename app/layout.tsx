@@ -21,7 +21,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={inter.className}>
         {children}
-        <Toaster />
+        <div className="fixed inset-0 pointer-events-none z-[9999]">
+          <Toaster />
+        </div>
       </body>
     </html>
   )
