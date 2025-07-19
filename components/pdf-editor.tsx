@@ -34,7 +34,7 @@ import {
 
 // Configurar worker do PDF.js apenas no cliente
 if (typeof window !== "undefined") {
-  pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
+  pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString()
 }
 
 interface PDFPage {
@@ -1072,9 +1072,9 @@ export default function PDFEditor() {
         {/* Modal Salvar PDF */}
         <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
           <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Salvar PDF Organizado</DialogTitle>
-            </DialogHeader>
+            <DialogTitle className="flex flex-col space-y-1.5 text-center sm:text-left text-lg font-semibold leading-none tracking-tight">
+              Salvar PDF Organizado
+            </DialogTitle>
             <div className="space-y-4">
               {generationStep === "generating" ? (
                 <div className="flex items-center justify-center py-8">
@@ -1115,9 +1115,9 @@ export default function PDFEditor() {
         {/* Modal Salvar ZIP */}
         <Dialog open={showZipDialog} onOpenChange={setShowZipDialog}>
           <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Salvar Páginas Separadamente</DialogTitle>
-            </DialogHeader>
+            <DialogTitle className="flex flex-col space-y-1.5 text-center sm:text-left text-lg font-semibold leading-none tracking-tight">
+              Salvar Páginas Separadamente
+            </DialogTitle>
             <div className="space-y-4">
               {generationStep === "generating" ? (
                 <div className="flex items-center justify-center py-8">
